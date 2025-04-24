@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\TaskApiController;
+
 
 
 // Authentification API (login et token)
