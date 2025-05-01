@@ -1,4 +1,4 @@
-<x-app-layout>
+
     <div class="p-6">
         <h2 class="text-xl mb-4">Mes Tâches</h2>
 
@@ -9,6 +9,7 @@
         </form>
 
         <ul class="mt-4">
+        @if ($tasks && count($tasks) > 0)
             @foreach($tasks as $task)
                 <li class="flex justify-between items-center border-b py-2 hover:bg-gray-50">
                     <form action="{{ route('tasks.toggle', $task) }}" method="POST" class="flex items-center">
@@ -17,7 +18,53 @@
                         <button type="submit" class="{{ $task->is_done ? 'line-through text-gray-500' : 'text-gray-800' }} transition duration-300">
                             {{ $task->title }}
                         </button>
-                    </form>
+                    </form>@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <h2>Mes Tâches</h2>
+
+    <!-- Message de succès -->
+    @if(session('success'))
+        <div style="color: green;">{{ session('success') }}</div>
+    @endif
+
+    <!-- Formulaire d'ajout -->
+    <form action="{{ route('tasks.store') }}" method="POST">
+        @csrf
+        <input type="text" name="title" placeholder="Nouvelle tâche" required>
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <!-- Liste des tâches -->
+    <ul>
+        @forelse ($tasks as $task)
+            <li>
+                {{ $task->title }}
+                
+                <!-- Supprimer -->
+                <form action="{{ route('tasks.destroy', $task) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit">Supprimer</button>
+                </form>
+
+                <!-- Marquer comme fait/non fait -->
+                <form action="{{ route('tasks.toggle', $task) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('PATCH')
+                    <button type="submit">
+                        {{ $task->is_done ? 'Marquer comme non faite' : 'Marquer comme faite' }}
+                    </button>
+                </form>
+            </li>
+        @empty
+            <li>Aucune tâche pour le moment.</li>
+        @endforelse
+    </ul>
+</div>
+@endsection
+
                     <div class="flex gap-2">
                         <form method="POST" action="{{ route('tasks.destroy', $task) }}">
                             @csrf

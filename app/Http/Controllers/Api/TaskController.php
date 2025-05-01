@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 
 class TaskController extends Controller
+
 {
     /**
      * Liste toutes les tâches de l'utilisateur connecté.
